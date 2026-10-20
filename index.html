@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal System | Data Alcott Systems</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-users-gear"></i>
+                <span class="brand-text">ClientPortal</span>
+            </div>
+            
+            <div class="user-role-badge" id="roleBadge">
+                <span id="currentRoleText">Client Mode</span>
+            </div>
+
+            <ul class="nav-links">
+                <li class="active"><a href="#dashboard" onclick="showSection('dashboard')"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></a></li>
+                <li class="client-only"><a href="#profile" onclick="showSection('profile')"><i class="fa-solid fa-user"></i> <span>Profile</span></a></li>
+                <li><a href="#projects" onclick="showSection('projects')"><i class="fa-solid fa-diagram-project"></i> <span>Projects</span></a></li>
+                <li><a href="#documents" onclick="showSection('documents')"><i class="fa-solid fa-folder-open"></i> <span>Document Center</span></a></li>
+                <li><a href="#support" onclick="showSection('support')"><i class="fa-solid fa-headset"></i> <span>Support Desk</span></a></li>
+                <li><a href="#invoices" onclick="showSection('invoices')"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Invoices</span></a></li>
+                <li><a href="#messages" onclick="showSection('messages')"><i class="fa-solid fa-comments"></i> <span>Messages</span></a></li>
+                <li class="admin-only hidden"><a href="#admin" onclick="showSection('admin')"><i class="fa-solid fa-sliders"></i> <span>Admin Panel</span></a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button id="themeToggleBtn" onclick="toggleDarkMode()">
+                    <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navigation / Header -->
+            <header class="top-bar">
+                <div class="top-left">
+                    <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="top-right">
+                    <div class="role-switcher">
+                        <label for="roleSelect">Switch View:</label>
+                        <select id="roleSelect" onchange="switchRole(this.value)">
+                            <option value="client">Client View</option>
+                            <option value="admin">Admin View</option>
+                        </select>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=John+Smith&background=0EA5E9&color=fff" alt="User Avatar" id="userAvatar">
+                        <span id="userName">John Smith</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-body">
+                <!-- 1. Dashboard -->
+                <section id="dashboard" class="page-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fa-solid fa-list-check icon"></i>
+                            <div>
+                                <h3 id="statProjectsCount">0</h3>
+                                <p>Active Projects</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-file-pdf icon"></i>
+                            <div>
+                                <h3 id="statDocsCount">0</h3>
+                                <p>Documents</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-ticket icon"></i>
+                            <div>
+                                <h3 id="statTicketsCount">0</h3>
+                                <p>Open Tickets</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-receipt icon"></i>
+                            <div>
+                                <h3 id="statInvoicesCount">0</h3>
+                                <p>Pending Invoices</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+                            <ul class="activity-list" id="recentActivityList">
+                                <li>System initialised successfully.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary" onclick="showSection('documents')"><i class="fa-solid fa-upload"></i> Upload Doc</button>
+                                <button class="btn btn-secondary" onclick="showSection('support')"><i class="fa-solid fa-plus"></i> New Support Ticket</button>
+                                <button class="btn btn-outline" onclick="showSection('messages')"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Profile Management -->
+                <section id="profile" class="page-section">
+                    <div class="card">
+                        <h3>Client Profile Settings</h3>
+                        <form id="profileForm" onsubmit="saveProfile(event)">
+                            <div class="form-group">
+                                <label for="profName">Full Name</label>
+                                <input type="text" id="profName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profEmail">Email Address</label>
+                                <input type="email" id="profEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profCompany">Company Name</label>
+                                <input type="text" id="profCompany" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profPhone">Phone Number</label>
+                                <input type="text" id="profPhone" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- 3. Project Tracking -->
+                <section id="projects" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Project List & Milestones</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                               <thead>
+                                   <tr>
+                                       <th>Project Name</th>
+                                       <th>Client ID</th>
+                                       <th>Status</th>
+                                       <th>Progress</th>
+                                   </tr>
+                               </thead>
+                               <tbody id="projectsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Document Center -->
+                <section id="documents" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Documents</h3>
+                            <button class="btn btn-primary" onclick="openDocModal()"><i class="fa-solid fa-plus"></i> Upload Document</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Upload Date</th>
+                                        <th>Size</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="docsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Support / Helpdesk -->
+                <section id="support" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Support Tickets</h3>
+                            <button class="btn btn-primary" onclick="openTicketModal()"><i class="fa-solid fa-plus"></i> Submit Ticket</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticketsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Invoices & Billing -->
+                <section id="invoices" class="page-section">
+                    <div class="card">
+                        <h3>Invoices & Payment History</h3>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice ID</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Due Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoicesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. Messages -->
+                <section id="messages" class="page-section">
+                    <div class="card chat-card">
+                        <h3>Account Manager Messaging</h3>
+                        <div class="chat-box" id="chatBox"></div>
+                        <form id="msgForm" onsubmit="sendMessage(event)" class="chat-input-group">
+                            <input type="text" id="msgInput" placeholder="Type your message..." required>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- 8. Admin Panel -->
+                <section id="admin" class="page-section">
+                    <div class="card">
+                        <h3>Admin Management Overview</h3>
+                        <p>Manage all system clients, projects, and invoices from this dashboard.</p>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" onclick="alert('Admin: Client added successfully')">+ Add New Client</button>
+                            <button class="btn btn-secondary" onclick="alert('Admin: Invoice generated')">+ Generate Invoice</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div class="modal" id="docModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeDocModal()">&times;</span>
+            <h3>Upload New Document</h3>
+            <form id="docUploadForm" onsubmit="uploadDocument(event)">
+                <div class="form-group">
+                    <label for="docName">Document Name</label>
+                    <input type="text" id="docName" required>
+                </div>
+                <div class="form-group">
+                    <label for="docType">File Type</label>
+                    <select id="docType">
+                        <option value="PDF">PDF</option>
+                        <option value="DOCX">DOCX</option>
+                        <option value="PNG">PNG/JPG</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save File</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Support Ticket Modal -->
+    <div class="modal" id="ticketModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeTicketModal()">&times;</span>
+            <h3>Create Support Ticket</h3>
+            <form id="ticketForm" onsubmit="createTicket(event)">
+                <div class="form-group">
+                    <label for="ticketSubject">Subject</label>
+                    <input type="text" id="ticketSubject" required>
+                </div>
+                <div class="form-group">
+                    <label for="ticketPriority">Priority</label>
+                    <select id="ticketPriority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Ticket</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
